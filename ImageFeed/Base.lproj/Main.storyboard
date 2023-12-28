@@ -27,7 +27,46 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="5rQ-gh-HKG" id="Pu6-oL-4Db">
                                             <rect key="frame" x="0.0" y="0.0" width="393" height="258"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="aJ1-dZ-Mwx" userLabel="Cell Image">
+                                                    <rect key="frame" x="16" y="4" width="361" height="250"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                            <integer key="value" value="16"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="layer.maskToBounds" value="YES"/>
+                                                    </userDefinedRuntimeAttributes>
+                                                </imageView>
+                                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="s7f-NW-bnp" userLabel="Like Button">
+                                                    <rect key="frame" x="298" y="11" width="75" height="35"/>
+                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                    <state key="normal" image="like_button_off"/>
+                                                </button>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DZO-1x-MTy" userLabel="Date Label">
+                                                    <rect key="frame" x="20" y="226" width="42" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" name="YP White"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" name="YP Black"/>
+                                            <constraints>
+                                                <constraint firstItem="s7f-NW-bnp" firstAttribute="trailing" secondItem="aJ1-dZ-Mwx" secondAttribute="trailing" id="BLC-JI-ntg"/>
+                                                <constraint firstItem="aJ1-dZ-Mwx" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="DZO-1x-MTy" secondAttribute="trailing" constant="8" id="Cbz-Fg-vDw"/>
+                                                <constraint firstAttribute="bottom" secondItem="aJ1-dZ-Mwx" secondAttribute="bottom" constant="4" id="Jvh-ri-55Q"/>
+                                                <constraint firstItem="aJ1-dZ-Mwx" firstAttribute="leading" secondItem="Pu6-oL-4Db" secondAttribute="leading" constant="16" id="Nx2-ya-FQa"/>
+                                                <constraint firstItem="DZO-1x-MTy" firstAttribute="leading" secondItem="aJ1-dZ-Mwx" secondAttribute="leading" constant="8" id="Qfl-AC-h67"/>
+                                                <constraint firstItem="s7f-NW-bnp" firstAttribute="top" secondItem="aJ1-dZ-Mwx" secondAttribute="top" id="Rna-ym-JTs"/>
+                                                <constraint firstItem="aJ1-dZ-Mwx" firstAttribute="bottom" secondItem="DZO-1x-MTy" secondAttribute="bottom" constant="8" id="Tcg-Qy-ndL"/>
+                                                <constraint firstItem="aJ1-dZ-Mwx" firstAttribute="top" secondItem="Pu6-oL-4Db" secondAttribute="top" constant="4" id="Zj8-tP-xzc"/>
+                                                <constraint firstAttribute="trailing" secondItem="aJ1-dZ-Mwx" secondAttribute="trailing" constant="16" id="nFX-Ys-1NC"/>
+                                            </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="cellImage" destination="aJ1-dZ-Mwx" id="ntS-wd-w3s"/>
+                                            <outlet property="dateLabel" destination="DZO-1x-MTy" id="rSp-16-F5d"/>
+                                            <outlet property="likeButton" destination="s7f-NW-bnp" id="Uwo-wP-GRK"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -55,8 +94,12 @@
         </scene>
     </scenes>
     <resources>
+        <image name="like_button_off" width="44" height="44"/>
         <namedColor name="YP Black">
             <color red="0.10199999809265137" green="0.10599999874830246" blue="0.13300000131130219" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="YP White">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>
