@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ImagesListViewController: UIViewController {
+final class ImagesListViewController: UIViewController {
 
     @IBOutlet private var tableView: UITableView!
     
@@ -41,8 +41,6 @@ extension ImagesListViewController {
         cell.likeButton.setImage(likeImage, for: .normal)
         
     }
-
-    
 }
 
 extension ImagesListViewController: UITableViewDelegate {
@@ -63,6 +61,7 @@ extension ImagesListViewController: UITableViewDelegate {
         
     }
 }
+
 extension ImagesListViewController: UITableViewDataSource {
         
         //количество ячеек в секции
@@ -81,9 +80,4 @@ extension ImagesListViewController: UITableViewDataSource {
             configCell(for: imageListCell, with: indexPath)
             return imageListCell
         }
-        
-        
-        
-        
     }
-
