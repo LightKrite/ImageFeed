@@ -33,6 +33,11 @@ final class AuthViewController: UIViewController {
     
     @objc func buttonTapped() {
         print("Кнопка была нажата!")
+        
+        performSegue(withIdentifier: "ShowWebView", sender: self)
+        
+//        let webViewViewController = WebViewViewController()
+//        navigationController?.pushViewController(webViewViewController, animated: true)
     }
     
     private func setupViews() {

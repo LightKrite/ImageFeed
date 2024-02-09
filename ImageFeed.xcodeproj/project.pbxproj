@@ -19,6 +19,7 @@
 		747C6F442B73A5B4009693B0 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747C6F432B73A5B4009693B0 /* Constants.swift */; };
 		747C6F462B74EFCF009693B0 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747C6F452B74EFCF009693B0 /* AuthViewController.swift */; };
 		74BD4F812B4598BE00FF8243 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74BD4F802B4598BE00FF8243 /* ProfileViewController.swift */; };
+		74C8631B2B766EB900B414ED /* WebViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C8631A2B766EB800B414ED /* WebViewViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		747C6F432B73A5B4009693B0 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		747C6F452B74EFCF009693B0 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		74BD4F802B4598BE00FF8243 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		74C8631A2B766EB800B414ED /* WebViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +115,7 @@
 			isa = PBXGroup;
 			children = (
 				747C6F452B74EFCF009693B0 /* AuthViewController.swift */,
+				74C8631A2B766EB800B414ED /* WebViewViewController.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -196,6 +199,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				74C8631B2B766EB900B414ED /* WebViewViewController.swift in Sources */,
 				74BD4F812B4598BE00FF8243 /* ProfileViewController.swift in Sources */,
 				746231942B1A051E007991EB /* ImagesListViewController.swift in Sources */,
 				741DC6372B34664E007077A4 /* ImageListCell.swift in Sources */,
