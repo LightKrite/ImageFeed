@@ -57,20 +57,28 @@
                                     <action selector="didTapBackButton:" destination="Oo9-LJ-elU" eventType="touchUpInside" id="aU1-hw-hjG"/>
                                 </connections>
                             </button>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="oEz-t2-49V">
+                                <rect key="frame" x="0.0" y="94" width="393" height="4"/>
+                                <color key="progressTintColor" name="YP Black"/>
+                            </progressView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="hTp-6W-dSz"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="oEz-t2-49V" firstAttribute="leading" secondItem="Lnw-QO-1up" secondAttribute="leading" id="4vf-qb-tfo"/>
+                            <constraint firstItem="oEz-t2-49V" firstAttribute="top" secondItem="WwX-Ps-SFD" secondAttribute="bottom" id="PBM-3y-Dy9"/>
                             <constraint firstAttribute="trailing" secondItem="jfP-7m-FSP" secondAttribute="trailing" id="Ph0-Yu-4R7"/>
                             <constraint firstItem="jfP-7m-FSP" firstAttribute="leading" secondItem="Lnw-QO-1up" secondAttribute="leading" id="SAC-sN-SrJ"/>
                             <constraint firstAttribute="bottom" secondItem="jfP-7m-FSP" secondAttribute="bottom" id="X4i-01-bVh"/>
                             <constraint firstItem="jfP-7m-FSP" firstAttribute="top" secondItem="Lnw-QO-1up" secondAttribute="top" id="gnR-QP-3RD"/>
                             <constraint firstItem="WwX-Ps-SFD" firstAttribute="leading" secondItem="hTp-6W-dSz" secondAttribute="leading" constant="8" id="hIa-da-OqD"/>
                             <constraint firstItem="WwX-Ps-SFD" firstAttribute="top" secondItem="hTp-6W-dSz" secondAttribute="top" constant="11" id="nJd-mp-zxp"/>
+                            <constraint firstAttribute="trailing" secondItem="oEz-t2-49V" secondAttribute="trailing" id="o18-Sv-ic5"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="backButton" destination="WwX-Ps-SFD" id="u8p-wT-6n6"/>
+                        <outlet property="progressView" destination="oEz-t2-49V" id="Tg9-a3-Mhn"/>
                         <outlet property="webView" destination="jfP-7m-FSP" id="Pi3-Qf-Nwx"/>
                     </connections>
                 </viewController>
@@ -204,7 +212,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Ofh-e7-JXy">
-                                <rect key="frame" x="170" y="750" width="50" height="51"/>
+                                <rect key="frame" x="170" y="749" width="50" height="52"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="50" id="Vq9-IU-23N"/>

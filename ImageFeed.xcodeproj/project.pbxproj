@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		74029B0A2B79424F00893848 /* WebViewViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74029B092B79424F00893848 /* WebViewViewControllerDelegate.swift */; };
 		741DC6372B34664E007077A4 /* ImageListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 741DC6362B34664E007077A4 /* ImageListCell.swift */; };
 		742813B62B4AC4F9001225FF /* SingleImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 742813B52B4AC4F9001225FF /* SingleImageViewController.swift */; };
 		746231902B1A051E007991EB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7462318F2B1A051E007991EB /* AppDelegate.swift */; };
@@ -23,6 +24,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		74029B092B79424F00893848 /* WebViewViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewViewControllerDelegate.swift; sourceTree = "<group>"; };
 		741DC6362B34664E007077A4 /* ImageListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageListCell.swift; sourceTree = "<group>"; };
 		742813B52B4AC4F9001225FF /* SingleImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleImageViewController.swift; sourceTree = "<group>"; };
 		7462318C2B1A051E007991EB /* ImageFeed.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageFeed.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -116,6 +118,7 @@
 			children = (
 				747C6F452B74EFCF009693B0 /* AuthViewController.swift */,
 				74C8631A2B766EB800B414ED /* WebViewViewController.swift */,
+				74029B092B79424F00893848 /* WebViewViewControllerDelegate.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -206,6 +209,7 @@
 				742813B62B4AC4F9001225FF /* SingleImageViewController.swift in Sources */,
 				746231A62B1A37C9007991EB /* Colors + Extensions.swift in Sources */,
 				746231902B1A051E007991EB /* AppDelegate.swift in Sources */,
+				74029B0A2B79424F00893848 /* WebViewViewControllerDelegate.swift in Sources */,
 				746231922B1A051E007991EB /* SceneDelegate.swift in Sources */,
 				747C6F462B74EFCF009693B0 /* AuthViewController.swift in Sources */,
 				747C6F442B73A5B4009693B0 /* Constants.swift in Sources */,
