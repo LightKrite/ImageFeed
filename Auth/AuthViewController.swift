@@ -8,22 +8,25 @@
 import Foundation
 import UIKit
 
+protocol AuthViewControllerDelegate: AnyObject {
+    func authViewViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String)
+}
+
 final class AuthViewController: UIViewController {
     
     private let ShowWebViewSegueIdentifier = "ShowWebView"
+    
+    weak var delegate: AuthViewControllerDelegate?
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == ShowWebViewSegueIdentifier {
-            guard
-                let webViewViewController = segue.destination as? WebViewViewController
+            guard let webViewViewController = segue.destination as? WebViewViewController
             else { fatalError("Failed to prepare for \(ShowWebViewSegueIdentifier)") }
             webViewViewController.delegate = self
         } else {
             super.prepare(for: segue, sender: sender)
         }
     }
-    
-    
     
     private let logoView: UIImageView = {
         let logoImage = UIImage(named: "auth_screen_logo")
@@ -50,9 +53,6 @@ final class AuthViewController: UIViewController {
         print("Кнопка была нажата!")
         
         performSegue(withIdentifier: ShowWebViewSegueIdentifier, sender: self)
-        
-//        let webViewViewController = WebViewViewController()
-//        navigationController?.pushViewController(webViewViewController, animated: true)
     }
     
     private func setupViews() {
@@ -81,7 +81,7 @@ final class AuthViewController: UIViewController {
 
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
-        //TODO: in progress
+        delegate?.authViewViewController(self, didAuthenticateWithCode: code)
     }
     
     func webViewViewControllerDidCancel(_ vc: WebViewViewController) {
