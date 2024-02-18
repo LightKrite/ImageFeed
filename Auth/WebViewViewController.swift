@@ -71,16 +71,13 @@ final class WebViewViewController: UIViewController {
     }
 }
 
-
-
-
 private extension WebViewViewController {
     func loadWebView() {
-        var components = URLComponents(string: defaultBaseURLString)!
-        components.queryItems = [URLQueryItem(name: "client_id", value: AccessKey),
-                                 URLQueryItem(name: "redirect_uri", value: RedirectURI),
+        var components = URLComponents(string: APIConstatns.defaultBaseURLString)!
+        components.queryItems = [URLQueryItem(name: "client_id", value: APIConstatns.accessKey),
+                                 URLQueryItem(name: "redirect_uri", value: APIConstatns.redirectURI),
                                  URLQueryItem(name: "response_type", value: "code"),
-                                 URLQueryItem(name: "scope", value: AccessScope)]
+                                 URLQueryItem(name: "scope", value: APIConstatns.accessScope)]
         let url = components.url!
         let request = URLRequest(url: url)
         webView.load(request)
@@ -100,11 +97,6 @@ private extension WebViewViewController {
         }
     }
 }
-
-
-
-
-
 
 extension WebViewViewController: WKNavigationDelegate {
     func webView(

@@ -18,9 +18,9 @@ final class OAuth2Service {
     
     private func makeURL(code: String) -> URLComponents {
         var urlComponents = URLComponents(string: "https://unsplash.com/oauth/token")!
-        urlComponents.queryItems = [URLQueryItem(name: "client_id", value: AccessKey),
-                                    URLQueryItem(name: "client_secret", value: SecretKey),
-                                    URLQueryItem(name: "redirect_uri", value: RedirectURI),
+        urlComponents.queryItems = [URLQueryItem(name: "client_id", value: APIConstatns.accessKey),
+                                    URLQueryItem(name: "client_secret", value: APIConstatns.secretKey),
+                                    URLQueryItem(name: "redirect_uri", value: APIConstatns.redirectURI),
                                     URLQueryItem(name: "code", value: code),
                                     URLQueryItem(name: "grant_type", value: "authorization_code")]
         
@@ -62,13 +62,13 @@ final class OAuth2Service {
         task.resume()
     }
 }
-    
+
 enum NetworkError: Error {
     case badURL
     case httpStatusCode(Int)
     case invalidDecoding
 }
-   
+
 private struct OAuthTokenResponseBody: Decodable {
     let accessToken: String
     let tokenType: String
@@ -82,4 +82,4 @@ private struct OAuthTokenResponseBody: Decodable {
         case createdAt = "created_at"
     }
 }
-    
+

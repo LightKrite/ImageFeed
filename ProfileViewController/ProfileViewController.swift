@@ -96,7 +96,3 @@ final class ProfileViewController: UIViewController {
         profileDescriptionLabel.removeFromSuperview()
     }
 }
-
-
-
-
