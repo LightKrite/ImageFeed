@@ -78,7 +78,7 @@ final class ProfileViewController: UIViewController {
         return label
     }()
     
-    private var logoutButton: UIButton = {
+    private lazy var logoutButton: UIButton = {
         let button = UIButton.systemButton(
             with: UIImage(named: "exitButton")!,
             target: self,
@@ -96,7 +96,3 @@ final class ProfileViewController: UIViewController {
         profileDescriptionLabel.removeFromSuperview()
     }
 }
-
-
-
-
