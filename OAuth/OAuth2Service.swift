@@ -10,6 +10,8 @@ import Foundation
 final class OAuth2Service {
     
     static let shared = OAuth2Service()
+    private init() {}
+    
     
     private (set) var authToken: String? {
         get { OAuth2Storage().token }
@@ -63,11 +65,11 @@ final class OAuth2Service {
     }
 }
 
-enum NetworkError: Error {
-    case badURL
-    case httpStatusCode(Int)
-    case invalidDecoding
-}
+//enum NetworkError: Error {
+//    case badURL
+//    case httpStatusCode(Int)
+//    case invalidDecoding
+//}
 
 private struct OAuthTokenResponseBody: Decodable {
     let accessToken: String

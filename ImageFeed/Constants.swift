@@ -15,6 +15,7 @@ enum APIConstatns {
     static let accessScope = "public+read_user+write_likes"
     static let defaultBaseURLString = "https://unsplash.com/oauth/authorize"
     static let defaultBaseURL = URL(string: defaultBaseURLString)
+    static let bearerToken: String = ""
     
 }
 

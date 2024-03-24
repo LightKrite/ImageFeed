@@ -13,6 +13,7 @@ final class SplashViewController: UIViewController {
     
     private let showAuthScreenId = "ShowAuthenticationScreen"
     
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if OAuth2Storage().token != nil {
@@ -46,7 +47,8 @@ extension SplashViewController {
 }
 
 extension SplashViewController: AuthViewControllerDelegate {
-    func authViewViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
+    
+    func didAuthenticate(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
         ProgressHUD.show()
         dismiss(animated: true) { [weak self] in
             guard let self = self else { return }

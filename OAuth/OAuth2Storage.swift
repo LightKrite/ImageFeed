@@ -11,10 +11,10 @@ final class OAuth2Storage {
     private let key = "token"
     var token: String? {
         get {
-            return UserDefaults.standard.string(forKey: key)
+            return UserDefaults.standard.string(forKey: APIConstatns.bearerToken)
         }
         set {
-            UserDefaults.standard.set(newValue, forKey: key)
+            UserDefaults.standard.set(newValue, forKey: APIConstatns.bearerToken)
         }
     }
 }

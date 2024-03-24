@@ -29,7 +29,7 @@ final class WebViewViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         webView.navigationDelegate = self
-        loadWebView()
+        loadAuthView()
         updateProgress()
     }
     
@@ -72,13 +72,22 @@ final class WebViewViewController: UIViewController {
 }
 
 private extension WebViewViewController {
-    func loadWebView() {
-        var components = URLComponents(string: APIConstatns.defaultBaseURLString)!
+    func loadAuthView() {
+        guard var components = URLComponents(string: APIConstatns.defaultBaseURLString) else {
+            print("Не удалось обратиться к константе BaseURL")
+            return
+        }
+        
         components.queryItems = [URLQueryItem(name: "client_id", value: APIConstatns.accessKey),
                                  URLQueryItem(name: "redirect_uri", value: APIConstatns.redirectURI),
                                  URLQueryItem(name: "response_type", value: "code"),
                                  URLQueryItem(name: "scope", value: APIConstatns.accessScope)]
-        let url = components.url!
+        
+        guard let url = components.url else {
+            print("Не удалось собрать URL")
+            return
+        }
+        
         let request = URLRequest(url: url)
         webView.load(request)
     }
