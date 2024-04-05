@@ -27,6 +27,7 @@
 		74D87FDD2B7FB0B600CA180D /* OAuth2Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D87FDC2B7FB0B600CA180D /* OAuth2Service.swift */; };
 		74D87FDF2B7FB0CA00CA180D /* OAuth2Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D87FDE2B7FB0CA00CA180D /* OAuth2Storage.swift */; };
 		74D87FE22B7FE6F600CA180D /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74D87FE12B7FE6F600CA180D /* SplashViewController.swift */; };
+		74E501552BC02F1100B95F28 /* UIBlockingProgressHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E501542BC02F1100B95F28 /* UIBlockingProgressHUD.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -49,6 +50,7 @@
 		74D87FDC2B7FB0B600CA180D /* OAuth2Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2Service.swift; sourceTree = "<group>"; };
 		74D87FDE2B7FB0CA00CA180D /* OAuth2Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2Storage.swift; sourceTree = "<group>"; };
 		74D87FE12B7FE6F600CA180D /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
+		74E501542BC02F1100B95F28 /* UIBlockingProgressHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBlockingProgressHUD.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,6 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				746231A52B1A37C9007991EB /* Colors + Extensions.swift */,
+				74E501542BC02F1100B95F28 /* UIBlockingProgressHUD.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -251,6 +254,7 @@
 				74D87FDD2B7FB0B600CA180D /* OAuth2Service.swift in Sources */,
 				742813B62B4AC4F9001225FF /* SingleImageViewController.swift in Sources */,
 				74D87FE22B7FE6F600CA180D /* SplashViewController.swift in Sources */,
+				74E501552BC02F1100B95F28 /* UIBlockingProgressHUD.swift in Sources */,
 				74D87FDF2B7FB0CA00CA180D /* OAuth2Storage.swift in Sources */,
 				746231A62B1A37C9007991EB /* Colors + Extensions.swift in Sources */,
 				746231902B1A051E007991EB /* AppDelegate.swift in Sources */,

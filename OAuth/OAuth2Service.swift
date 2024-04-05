@@ -12,6 +12,11 @@ final class OAuth2Service {
     static let shared = OAuth2Service()
     private init() {}
     
+    private let urlSession = URLSession.shared
+    
+    private var task: URLSessionTask?
+    private var lastCode: String?
+    
     
     private (set) var authToken: String? {
         get { OAuth2Storage().token }
@@ -30,6 +35,16 @@ final class OAuth2Service {
     }
     
     func fetchAuthToken(code: String, completion: @escaping (Result<String, Error>)-> Void) {
+        
+        assert(Thread.isMainThread)
+        
+        guard lastCode != code else {
+            completion(.failure(NetworkError.invalidRequest))
+            return
+        }
+        task?.cancel()
+        lastCode = code
+        
         guard let url = makeURL(code: code).url else {
             completion(.failure(NetworkError.badURL))
             return
@@ -41,35 +56,34 @@ final class OAuth2Service {
                 completion(result)
             }
         }
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let data = data,
-               let response = response,
-               let statusCode = (response as? HTTPURLResponse)?.statusCode {
-                if 200..<300 ~= statusCode {
-                    let decoder = JSONDecoder()
-                    guard let object = try? decoder.decode(OAuthTokenResponseBody.self, from: data) else {
-                        fulfillCompletion(.failure(NetworkError.invalidDecoding))
+        let task = urlSession.dataTask(with: request) { [weak self] data, response, error in
+            DispatchQueue.main.async {
+                if let data = data,
+                   let response = response,
+                   let statusCode = (response as? HTTPURLResponse)?.statusCode {
+                    if 200..<300 ~= statusCode {
+                        let decoder = JSONDecoder()
+                        guard let object = try? decoder.decode(OAuthTokenResponseBody.self, from: data) else {
+                            fulfillCompletion(.failure(NetworkError.invalidDecoding))
+                            return
+                        }
+                        let authToken = object.accessToken
+                        self?.authToken = authToken
+                        fulfillCompletion(.success(authToken))
+                    }
+                    else {
+                        fulfillCompletion(.failure(error ?? NetworkError.httpStatusCode(statusCode)))
                         return
                     }
-                    let authToken = object.accessToken
-                    self.authToken = authToken
-                    fulfillCompletion(.success(authToken))
                 }
-                else {
-                    fulfillCompletion(.failure(error ?? NetworkError.httpStatusCode(statusCode)))
-                    return
-                }
+                self?.task = nil
+                self?.lastCode = nil
             }
         }
+        self.task = task
         task.resume()
     }
 }
-
-//enum NetworkError: Error {
-//    case badURL
-//    case httpStatusCode(Int)
-//    case invalidDecoding
-//}
 
 private struct OAuthTokenResponseBody: Decodable {
     let accessToken: String
@@ -84,4 +98,3 @@ private struct OAuthTokenResponseBody: Decodable {
         case createdAt = "created_at"
     }
 }
-
