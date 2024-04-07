@@ -19,8 +19,12 @@ final class OAuth2Service {
     
     
     private (set) var authToken: String? {
-        get { OAuth2Storage().token }
-        set { OAuth2Storage().token = newValue }
+        get {
+            return OAuth2Storage().token
+        }
+        set {
+            OAuth2Storage().token = newValue
+        }
     }
     
     private func makeURL(code: String) -> URLComponents {
