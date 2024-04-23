@@ -54,7 +54,7 @@ final class WebViewViewController: UIViewController {
 private extension WebViewViewController {
     func loadAuthView() {
         guard var components = URLComponents(string: APIConstatns.defaultBaseURLString) else {
-            print("Не удалось обратиться к константе BaseURL")
+            debugPrint("Не удалось обратиться к константе BaseURL")
             return
         }
         

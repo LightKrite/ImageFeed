@@ -52,7 +52,7 @@ final class AuthViewController: UIViewController {
     }()
     
     @objc func buttonTapped() {
-        print("Кнопка была нажата!")
+        debugPrint("Кнопка была нажата!")
         
         performSegue(withIdentifier: showWebViewSegueIdentifier, sender: self)
     }

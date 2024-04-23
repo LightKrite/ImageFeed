@@ -80,7 +80,7 @@ extension SplashViewController: AuthViewControllerDelegate {
                     self.fetchProfile(token: token)
                 case .failure(let error):
                     UIBlockingProgressHUD.dismiss()
-                    print("токен не получен \(error)")
+                    debugPrint("токен не получен \(error)")
                     self.showAlert()
                 }
             }
@@ -96,7 +96,7 @@ extension SplashViewController: AuthViewControllerDelegate {
                 self.switchToTabBarController()
             case .failure(let error):
                 UIBlockingProgressHUD.dismiss()
-                print("профиль не получен \(error)")
+                debugPrint("профиль не получен \(error)")
                 self.showAlert()
             }
         }

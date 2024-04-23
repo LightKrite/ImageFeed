@@ -269,7 +269,7 @@ extension ProfileViewController {
 private extension ProfileViewController {
     func updateProfileDetails() {
         guard let profile = profileService.profile else { return }
-        print("зашел в updateProfileDetails")
+        debugPrint("зашел в updateProfileDetails")
         nameLabel.text = "\(profile.firstName) \(profile.lastName ?? "")"
         nicknameLabel.text = "@\(profile.username)"
         descriptionLabel.text = profile.bio
