@@ -12,29 +12,47 @@ enum NetworkError: Error {
     case invalidDecoding
     case httpStatusCode(Int)
     case urlRequestError(Error)
-    case urlSessionError
+    case urlSessionError(Error)
     case invalidRequest
 }
 
+
+
 extension URLSession {
     
-    func objectTask<T: Decodable>(for request: URLRequest, completion: @escaping (Result<T, Error>) -> Void) -> URLSessionTask {
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let data = data,
-               let response = response,
-               let statusCode = (response as? HTTPURLResponse)?.statusCode {
-                if 200..<300 ~= statusCode {
+    func objectTask<T: Decodable>(
+        for request: URLRequest,
+        completion: @escaping (Result<T, Error>) -> Void
+    ) -> URLSessionTask {
+        let task = dataTask(with: request) { data, response, error in
+            
+            if let error = error {
+                DispatchQueue.main.async {
+                    completion(.failure(NetworkError.urlSessionError(error)))
+                }
+            }
+            
+            if let response = response as? HTTPURLResponse {
+                if !(200..<300 ~= response.statusCode) {
+                    DispatchQueue.main.async {
+                        completion(.failure(NetworkError.httpStatusCode(response.statusCode)))
+                    }
+                }
+            }
+            
+            if let data = data {
+                do {
                     let decoder = JSONDecoder()
                     decoder.keyDecodingStrategy = .convertFromSnakeCase
-                    guard let object = try? decoder.decode(T.self, from: data) else {
-                        completion(.failure(NetworkError.invalidDecoding))
-                        return
+                    let result = try decoder.decode(T.self, from: data)
+                    
+                    DispatchQueue.main.async {
+                        completion(.success(result))
                     }
-                    completion(.success(object))
-                }
-                else {
-                    completion(.failure(error ?? NetworkError.httpStatusCode(statusCode)))
-                    return
+                } catch {
+                    DispatchQueue.main.async {
+                        completion(.failure(NetworkError.urlSessionError(error)))
+                    }
                 }
             }
         }
@@ -72,14 +90,16 @@ extension URLSession {
 //    }
 }
 
-
 extension URLRequest {
     static func makeHTTPRequest(
         path: String,
         httpMethod: String,
-        baseURL: URL
-    ) -> URLRequest {
-        guard let url = URL(string: path, relativeTo: baseURL) else {fatalError("Failed to create URL")}
+        baseURL: URL = APIConstatns.defaultAPIBaseURL
+    ) -> URLRequest? {
+        guard let url = URL(string: path, relativeTo: baseURL) else {
+            assertionFailure("Failed to make url")
+            return nil
+        }
         var request = URLRequest(url: url)
         request.httpMethod = httpMethod
         return request

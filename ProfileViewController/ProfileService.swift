@@ -10,33 +10,32 @@ import Foundation
 final class ProfileService {
     static let shared = ProfileService()
     private let urlSession = URLSession.shared
-    private (set) var profile: Profile?
+    private (set) var profile: ProfileResult?
     private var task:URLSessionTask?
+    private var lastToken: String?
     
     
-    func fetchProfile(token: String, completion: @escaping (Result<Profile, Error>) -> Void ) {
+    func fetchProfile(token: String, completion: @escaping (Result<ProfileResult, Error>) -> Void ) {
         assert(Thread.isMainThread)
-        guard task == nil else { return }
-        var request = URLRequest.makeHTTPRequest(
-            path: "/me",
-            httpMethod: "GET",
-            baseURL: APIConstatns.defaultAPIBaseURL)
-        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        if lastToken == token { return }
+        task?.cancel()
+        lastToken = token
         
-        let completionOnMainThread: (Result<Profile, Error>) -> Void = { result in
-            DispatchQueue.main.async {
-                completion(result)
-            }
+        guard var request = URLRequest.makeHTTPRequest(path: "/me", httpMethod: "GET") else {
+            assertionFailure("Failed to make HTTP request")
+            return
         }
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         
         let task = urlSession.objectTask(for: request) { [weak self] (result: Result<ProfileResult, Error>) in
             guard let self = self else { return }
             switch result {
-            case .success(let profile):
-                self.profile = Profile(username: profile.username, firstName: profile.firstName, lastName: profile.lastName ?? "", bio: profile.bio ?? "")
-                completionOnMainThread(.success(self.profile!))
+            case .success(let profileResult):
+                self.profile = profileResult
+                completion(.success(profileResult))
+                self.task = nil
             case .failure(let error):
-                completionOnMainThread(.failure(error))
+                completion(.failure(error))
                 self.task = nil
             }
         }

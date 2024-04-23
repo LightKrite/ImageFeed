@@ -15,6 +15,8 @@ protocol AuthViewControllerDelegate: AnyObject {
 final class AuthViewController: UIViewController {
     
     private let showWebViewSegueIdentifier = "ShowWebView"
+    private let oAuth2Service = OAuth2Service()
+    private let oAuth2Storage = OAuth2Storage()
     
     weak var delegate: AuthViewControllerDelegate?
     
@@ -74,6 +76,7 @@ final class AuthViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.barStyle = .black
         setupViews()
         setupConstraits()
     }
@@ -86,5 +89,12 @@ extension AuthViewController: WebViewViewControllerDelegate {
     
     func webViewViewControllerDidCancel(_ vc: WebViewViewController) {
         dismiss(animated: true)
+    }
+}
+
+
+extension AuthViewController {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
 }

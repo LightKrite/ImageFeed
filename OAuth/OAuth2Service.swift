@@ -42,24 +42,19 @@ final class OAuth2Service {
         if lastCode == code { return }
         task?.cancel()
         lastCode = code
-        let request = authTokenRequest(code: code)
-        let completionOnMainThread: (Result<String, Error>) -> Void = { result in
-            DispatchQueue.main.async {
-                completion(result)
-            }
+        guard let request = makeRequest(code: code) else {
+            assertionFailure("Failed to make request")
+            return
         }
         
         let task = urlSession.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
             guard let self = self else { return }
             switch result {
-            case .success(let body):
-                let authToken = body.accessToken
-                self.authToken = authToken
-                completionOnMainThread(.success(authToken))
-                self.task = nil
+            case .success(let tokenResponseBody):
+                completion(.success(tokenResponseBody.accessToken))
             case .failure(let error):
-                completionOnMainThread(.failure(error))
                 self.lastCode = nil
+                completion(.failure(error))
             }
         }
         self.task = task
@@ -81,17 +76,21 @@ private struct OAuthTokenResponseBody: Decodable {
 //    }
 }
 
-extension OAuth2Service {
-    
-    private func authTokenRequest(code: String) -> URLRequest {
-        URLRequest.makeHTTPRequest(
-            path: "/oauth/token"
-            + "?client_id=\(APIConstatns.accessKey)"
-            + "&&client_secret=\(APIConstatns.secretKey)"
-            + "&&redirect_uri=\(APIConstatns.redirectURI)"
-            + "&&code=\(code)"
-            + "&&grant_type=authorization_code",
-            httpMethod: "POST",
-            baseURL: URL(string: "https://unsplash.com")!)
+private extension OAuth2Service {
+    func makeRequest(code: String) -> URLRequest? {
+        guard let url = URL(string: "https://unsplash.com"),
+              let request = URLRequest.makeHTTPRequest(
+                path: "/oauth/token"
+                + "?client_id=\(APIConstatns.accessKey)"
+                + "&&client_secret=\(APIConstatns.secretKey)"
+                + "&&redirect_uri=\(APIConstatns.redirectURI)"
+                + "&&code=\(code)"
+                + "&&grant_type=authorization_code",
+                httpMethod: "POST",
+                baseURL: url)
+        else {
+            return nil
+        }
+        return request
     }
 }

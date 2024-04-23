@@ -100,3 +100,10 @@ extension WebViewViewController: WKNavigationDelegate {
             }
         }
 }
+
+
+extension WebViewViewController {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .darkContent
+    }
+}
