@@ -12,82 +12,88 @@ enum NetworkError: Error {
     case invalidDecoding
     case httpStatusCode(Int)
     case urlRequestError(Error)
-    case urlSessionError(Error)
+    case urlSessionError
     case invalidRequest
+    case decodeError
 }
-
-
 
 extension URLSession {
     
     func objectTask<T: Decodable>(
         for request: URLRequest,
-        completion: @escaping (Result<T, Error>) -> Void
-    ) -> URLSessionTask {
-        let task = dataTask(with: request) { data, response, error in
+        completion: @escaping (Result<T, Error>) -> Void) -> URLSessionTask {
             
-            if let error = error {
+            let fulfillCompletion: (Result<T, Error>) -> Void = { result in
                 DispatchQueue.main.async {
-                    completion(.failure(NetworkError.urlSessionError(error)))
+                    completion(result)
                 }
             }
-            
-            if let response = response as? HTTPURLResponse {
-                if !(200..<300 ~= response.statusCode) {
-                    DispatchQueue.main.async {
-                        completion(.failure(NetworkError.httpStatusCode(response.statusCode)))
+            let task = dataTask(with: request, completionHandler: { data, response, error in
+                if let data = data,
+                   let response = response,
+                   let statusCode = (response as? HTTPURLResponse)?.statusCode
+                {
+                    if 200 ..< 300 ~= statusCode {
+                        do{
+                            let decoder = JSONDecoder()
+                            decoder.keyDecodingStrategy = .convertFromSnakeCase
+                            let decodedObject = try decoder.decode(T.self, from: data)
+                            fulfillCompletion(.success(decodedObject))
+                        } catch {
+                            fulfillCompletion(.failure(NetworkError.decodeError))
+                            debugPrint("\(String(describing: T.self)) [dataTask:] - Network Error")
+                        }
+                    } else {
+                        fulfillCompletion(.failure(NetworkError.httpStatusCode(statusCode)))
+                        debugPrint("\(String(describing: T.self)) [dataTask:] - Network Error \(statusCode)" )
                     }
+                } else if let error = error {
+                    fulfillCompletion(.failure(NetworkError.urlRequestError(error)))
+                    debugPrint("\(String(describing: T.self)) [dataTask:] - Network Error \(error)" )
+                } else {
+                    fulfillCompletion(.failure(NetworkError.urlSessionError))
+                    debugPrint("\(String(describing: T.self)) [dataTask:] - Network Error")
+
                 }
-            }
-            
-            if let data = data {
-                do {
-                    let decoder = JSONDecoder()
-                    decoder.keyDecodingStrategy = .convertFromSnakeCase
-                    let result = try decoder.decode(T.self, from: data)
-                    
-                    DispatchQueue.main.async {
-                        completion(.success(result))
-                    }
-                } catch {
-                    DispatchQueue.main.async {
-                        completion(.failure(NetworkError.urlSessionError(error)))
-                    }
-                }
+            })
+            task.resume()
+            return task
+        }
+    
+    func data(
+        for request: URLRequest,
+        completion: @escaping (Result<Data, Error>) -> Void
+    ) -> URLSessionTask {
+        let fulfillCompletion: (Result<Data, Error>) -> Void = { result in
+            DispatchQueue.main.async {
+                completion(result)
             }
         }
+        
+        let task = dataTask(with: request) { data, response, error in
+            if let data = data,
+                let response = response,
+                let statusCode = ( response as? HTTPURLResponse)?.statusCode
+            {
+                
+                if 200 ..< 300 ~= statusCode {
+                    fulfillCompletion(.success(data))
+                } else {
+                    fulfillCompletion(.failure(NetworkError.httpStatusCode(statusCode)))
+                    debugPrint("\(String(describing: self)) [dataTask:] - Network Error \(statusCode)" )
+                }
+            } else if let error = error {
+                fulfillCompletion(.failure(NetworkError.urlRequestError(error)))
+                debugPrint("\(String(describing: self)) [dataTask:] - Network Error \(error)" )
+            } else {
+                fulfillCompletion(.failure(NetworkError.urlSessionError))
+                debugPrint("\(String(describing: self)) [dataTask:] - Network Error")
+            }
+        }
+        task.resume()
         return task
     }
-    
-    
-//
-//    func data(for request: URLRequest, completion: @escaping (Result<Data, Error>) -> Void) -> URLSessionTask {
-//
-//        let fulfillCompletionOnMainThread: (Result<Data, Error>) -> Void = { result in
-//            DispatchQueue.main.async {
-//                completion(result)
-//            }
-//        }
-//
-//        let task = dataTask(with: request, completionHandler: { data, response, error in
-//            if let data = data,
-//               let response = response,
-//               let statusCode = (response as? HTTPURLResponse)?.statusCode {
-//                if 200 ..< 300 ~= statusCode {
-//                    fulfillCompletionOnMainThread(.success(data))
-//                } else {
-//                    fulfillCompletionOnMainThread(.failure(NetworkError.httpStatusCode(statusCode)))
-//                }
-//            } else if let error = error {
-//                fulfillCompletionOnMainThread(.failure(NetworkError.urlRequestError(error)))
-//            } else {
-//                fulfillCompletionOnMainThread(.failure(NetworkError.urlSessionError))
-//            }
-//        })
-//
-//        return task
-//
-//    }
+
 }
 
 extension URLRequest {

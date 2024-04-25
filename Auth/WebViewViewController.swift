@@ -39,11 +39,9 @@ final class WebViewViewController: UIViewController {
         updateProgress()
     }
     
-    
     @IBAction func didTapBackButton(_ sender: Any) {
             delegate?.webViewViewControllerDidCancel(self)
         }
-    
     
     private func updateProgress() {
         progressView.progress = Float(webView.estimatedProgress)
@@ -100,7 +98,6 @@ extension WebViewViewController: WKNavigationDelegate {
             }
         }
 }
-
 
 extension WebViewViewController {
     override var preferredStatusBarStyle: UIStatusBarStyle {

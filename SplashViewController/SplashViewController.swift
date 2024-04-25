@@ -102,8 +102,6 @@ extension SplashViewController: AuthViewControllerDelegate {
         }
     }
     
-    
-    
     func didAuthenticate(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
         UIBlockingProgressHUD.show()
         self.fetchOAuthToken(code)

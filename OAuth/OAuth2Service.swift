@@ -15,7 +15,6 @@ final class OAuth2Service {
     private var task: URLSessionTask?
     private var lastCode: String?
     
-    
     private (set) var authToken: String? {
         get {
             return OAuth2Storage().token
@@ -25,17 +24,6 @@ final class OAuth2Service {
         }
     }
     
-//    private func makeURL(code: String) -> URLComponents {
-//        var urlComponents = URLComponents(string: "https://unsplash.com/oauth/token")!
-//        urlComponents.queryItems = [URLQueryItem(name: "client_id", value: APIConstatns.accessKey),
-//                                    URLQueryItem(name: "client_secret", value: APIConstatns.secretKey),
-//                                    URLQueryItem(name: "redirect_uri", value: APIConstatns.redirectURI),
-//                                    URLQueryItem(name: "code", value: code),
-//                                    URLQueryItem(name: "grant_type", value: "authorization_code")]
-//
-//        return urlComponents
-//    }
-    
     func fetchAuthToken(code: String, completion: @escaping (Result<String, Error>)-> Void) {
         
         assert(Thread.isMainThread)
@@ -43,6 +31,8 @@ final class OAuth2Service {
         task?.cancel()
         lastCode = code
         guard let request = makeRequest(code: code) else {
+            completion(.failure(NetworkError.invalidRequest))
+            debugPrint("\(String(describing: self)) [fetchAuthToken:] - Network Error")
             assertionFailure("Failed to make request")
             return
         }
@@ -55,6 +45,8 @@ final class OAuth2Service {
             case .failure(let error):
                 self.lastCode = nil
                 completion(.failure(error))
+                debugPrint("\(String(describing: self)) [fetchAuthToken:] - Network Error")
+
             }
         }
         self.task = task
@@ -67,13 +59,6 @@ private struct OAuthTokenResponseBody: Decodable {
     let tokenType: String
     let scope: String
     let createdAt: Int
-    
-//    enum CodingKeys: String, CodingKey {
-//        case accessToken = "access_token"
-//        case tokenType = "token_type"
-//        case scope = "scope"
-//        case createdAt = "created_at"
-//    }
 }
 
 private extension OAuth2Service {

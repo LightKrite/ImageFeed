@@ -14,8 +14,6 @@ struct ProfileResult: Decodable {
     let bio: String?
 }
 
-
-
 struct Profile {
     let username: String?
     let name: String?

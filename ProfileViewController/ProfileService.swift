@@ -23,6 +23,8 @@ final class ProfileService {
         
         guard var request = URLRequest.makeHTTPRequest(path: "/me", httpMethod: "GET") else {
             assertionFailure("Failed to make HTTP request")
+            completion(.failure(NetworkError.invalidRequest))
+            debugPrint("\(String(describing: ProfileResult.self)) [dataTask:] - Network Error")
             return
         }
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
@@ -36,6 +38,7 @@ final class ProfileService {
                 self.task = nil
             case .failure(let error):
                 completion(.failure(error))
+                debugPrint("\(String(describing: ProfileResult.self)) [dataTask:] - Network Error \(error)" )
                 self.task = nil
             }
         }

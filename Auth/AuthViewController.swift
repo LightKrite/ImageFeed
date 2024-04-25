@@ -92,7 +92,6 @@ extension AuthViewController: WebViewViewControllerDelegate {
     }
 }
 
-
 extension AuthViewController {
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent

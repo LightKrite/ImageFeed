@@ -20,8 +20,6 @@ final class ProfileImageService {
         let large: String
     }
     
-    
-    
     static let shared = ProfileImageService()
     static let didChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
     private let urlSession = URLSession.shared
@@ -36,6 +34,9 @@ final class ProfileImageService {
         
         guard var request = URLRequest.makeHTTPRequest(path: "/users/\(username)", httpMethod: "GET"),
               let token = oAuthStorage.token else {
+            completion(.failure(NetworkError.invalidRequest))
+            debugPrint("\(String(describing: self)) [dataTask:] - Network Error")
+
             assertionFailure("Failed to make HTTP request")
             return
         }
@@ -55,6 +56,8 @@ final class ProfileImageService {
                 self.avatarURL = user.profileImage.large
             case .failure(let error):
                 completion(.failure(error))
+                debugPrint("\(String(describing: UserResult.self)) [dataTask:] - Network Error \(error)")
+
             }
             self.task = nil
         }

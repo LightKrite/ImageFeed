@@ -75,9 +75,4 @@ extension SingleImageViewController: UIScrollViewDelegate {
             let y = (newContentSize.height - visibleRectSize.height) / 2
             scrollView.setContentOffset(CGPoint(x: x, y: y), animated: false)
         }
-    
-    
-    
-    
-    
 }
