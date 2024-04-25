@@ -7,17 +7,28 @@
 
 import Foundation
 import UIKit
+import ProgressHUD
 
 final class SplashViewController: UIViewController {
     
-    private let showAuthScreenId = "ShowAuthenticationScreen"
+    private let profileService = ProfileService.shared
+    private let oAuthStorage = OAuth2Storage()
+    private let oAuthService = OAuth2Service()
+    private var logoView: UIImageView?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = .ypBlack
+        createLogoView()
+    }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        if OAuth2Storage().token != nil {
-            switchToTabBarController()
+        
+        if let token = oAuthStorage.token {
+            fetchProfile(token: token)
         } else {
-            performSegue(withIdentifier: showAuthScreenId, sender: nil)
+            switchToAuthViewController()
         }
     }
     
@@ -28,39 +39,71 @@ final class SplashViewController: UIViewController {
         let tabBarController = UIStoryboard(name: "Main", bundle: .main).instantiateViewController(withIdentifier: "TabBarController")
         window.rootViewController = tabBarController
     }
-}
-
-extension SplashViewController {
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == showAuthScreenId {
-            guard let navigationController = segue.destination as? UINavigationController,
-                  let viewController = navigationController.viewControllers[0] as? AuthViewController
-            else { fatalError("Failed to prepare for \(showAuthScreenId)")}
-            viewController.delegate = self
+    
+    private func switchToAuthViewController() {
+        let storyboard = UIStoryboard(name: "Main", bundle: .main)
+        guard let authViewController = storyboard.instantiateViewController(withIdentifier: "AuthViewControllerID") as? AuthViewController else { return }
+        authViewController.delegate = self
+        authViewController.modalPresentationStyle = .fullScreen
+        
+        present(authViewController, animated: true)
+    }
+    
+    private func showAlert() {
+        let alert = UIAlertController(title: "Что то пошло не так(", message: "Не удалось войти в систему", preferredStyle: .alert)
+        let alertAction = UIAlertAction(title: "OK", style: .default) { [weak self] _ in
+            guard let self = self else { return }
+            self.switchToAuthViewController()
         }
-        else {
-            super.prepare(for: segue, sender: sender)
-        }
+        alert.addAction(alertAction)
+        present(alert, animated: true)
+    }
+    
+    private func createLogoView() {
+        let logoView = UIImageView(image: UIImage(named: "splash_screen_logo"))
+        logoView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(logoView)
+        logoView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        logoView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
     }
 }
 
 extension SplashViewController: AuthViewControllerDelegate {
-    func authViewViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
-        dismiss(animated: true) { [weak self] in
+    
+    private func fetchOAuthToken(_ code: String) {
+        UIBlockingProgressHUD.show()
+            oAuthService.fetchAuthToken(code: code) { [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                case .success(let token):
+                    self.oAuthStorage.token = token
+                    self.fetchProfile(token: token)
+                case .failure(let error):
+                    UIBlockingProgressHUD.dismiss()
+                    debugPrint("токен не получен \(error)")
+                    self.showAlert()
+                }
+            }
+        }
+    
+    private func fetchProfile(token: String) {
+        profileService.fetchProfile(token: token) { [weak self] result in
             guard let self = self else { return }
-            self.fetchOAuthToken(code)
+            switch result {
+            case .success(let profile):
+                ProfileImageService.shared.fetchProfileImageURL(username: profile.username) { _ in }
+                UIBlockingProgressHUD.dismiss()
+                self.switchToTabBarController()
+            case .failure(let error):
+                UIBlockingProgressHUD.dismiss()
+                debugPrint("профиль не получен \(error)")
+                self.showAlert()
+            }
         }
     }
     
-    private func fetchOAuthToken(_ code: String) {
-        OAuth2Service.shared.fetchAuthToken(code: code) { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .success:
-                self.switchToTabBarController()
-            case .failure(let error):
-                print("токен не получен \(error)")
-            }
-        }
+    func didAuthenticate(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
+        UIBlockingProgressHUD.show()
+        self.fetchOAuthToken(code)
     }
 }

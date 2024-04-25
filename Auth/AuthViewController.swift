@@ -9,12 +9,14 @@ import Foundation
 import UIKit
 
 protocol AuthViewControllerDelegate: AnyObject {
-    func authViewViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String)
+    func didAuthenticate(_ vc: AuthViewController, didAuthenticateWithCode code: String)
 }
 
 final class AuthViewController: UIViewController {
     
     private let showWebViewSegueIdentifier = "ShowWebView"
+    private let oAuth2Service = OAuth2Service()
+    private let oAuth2Storage = OAuth2Storage()
     
     weak var delegate: AuthViewControllerDelegate?
     
@@ -50,7 +52,7 @@ final class AuthViewController: UIViewController {
     }()
     
     @objc func buttonTapped() {
-        print("Кнопка была нажата!")
+        debugPrint("Кнопка была нажата!")
         
         performSegue(withIdentifier: showWebViewSegueIdentifier, sender: self)
     }
@@ -74,6 +76,7 @@ final class AuthViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.barStyle = .black
         setupViews()
         setupConstraits()
     }
@@ -81,10 +84,16 @@ final class AuthViewController: UIViewController {
 
 extension AuthViewController: WebViewViewControllerDelegate {
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
-        delegate?.authViewViewController(self, didAuthenticateWithCode: code)
+        delegate?.didAuthenticate(self, didAuthenticateWithCode: code)
     }
     
     func webViewViewControllerDidCancel(_ vc: WebViewViewController) {
         dismiss(animated: true)
+    }
+}
+
+extension AuthViewController {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
 }
