@@ -17,6 +17,8 @@
 		746231992B1A0522007991EB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 746231982B1A0522007991EB /* Assets.xcassets */; };
 		7462319C2B1A0522007991EB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7462319A2B1A0522007991EB /* LaunchScreen.storyboard */; };
 		746231A62B1A37C9007991EB /* Colors + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 746231A52B1A37C9007991EB /* Colors + Extensions.swift */; };
+		747751B82BDBCED900CF7183 /* ImageListStructures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747751B72BDBCED900CF7183 /* ImageListStructures.swift */; };
+		747751BA2BDBCFC700CF7183 /* ImageListService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747751B92BDBCFC700CF7183 /* ImageListService.swift */; };
 		747C6F442B73A5B4009693B0 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747C6F432B73A5B4009693B0 /* Constants.swift */; };
 		747C6F462B74EFCF009693B0 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747C6F452B74EFCF009693B0 /* AuthViewController.swift */; };
 		748CB2DE2BA5654600FA1A57 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 748CB2DD2BA5654600FA1A57 /* Kingfisher */; };
@@ -46,6 +48,8 @@
 		7462319B2B1A0522007991EB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7462319D2B1A0522007991EB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		746231A52B1A37C9007991EB /* Colors + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Colors + Extensions.swift"; sourceTree = "<group>"; };
+		747751B72BDBCED900CF7183 /* ImageListStructures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageListStructures.swift; sourceTree = "<group>"; };
+		747751B92BDBCFC700CF7183 /* ImageListService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageListService.swift; sourceTree = "<group>"; };
 		747C6F432B73A5B4009693B0 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		747C6F452B74EFCF009693B0 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		748CB2E32BAC5BF800FA1A57 /* URLSession+Data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+Data.swift"; sourceTree = "<group>"; };
@@ -81,6 +85,8 @@
 				741DC6362B34664E007077A4 /* ImageListCell.swift */,
 				746231932B1A051E007991EB /* ImagesListViewController.swift */,
 				742813B52B4AC4F9001225FF /* SingleImageViewController.swift */,
+				747751B72BDBCED900CF7183 /* ImageListStructures.swift */,
+				747751B92BDBCFC700CF7183 /* ImageListService.swift */,
 			);
 			path = ImageList;
 			sourceTree = "<group>";
@@ -276,7 +282,9 @@
 			files = (
 				748CB2E42BAC5BF800FA1A57 /* URLSession+Data.swift in Sources */,
 				74E501572BC42D9F00B95F28 /* ProfileService.swift in Sources */,
+				747751BA2BDBCFC700CF7183 /* ImageListService.swift in Sources */,
 				74C8631B2B766EB900B414ED /* WebViewViewController.swift in Sources */,
+				747751B82BDBCED900CF7183 /* ImageListStructures.swift in Sources */,
 				74BD4F812B4598BE00FF8243 /* ProfileViewController.swift in Sources */,
 				746231942B1A051E007991EB /* ImagesListViewController.swift in Sources */,
 				741DC6372B34664E007077A4 /* ImageListCell.swift in Sources */,
