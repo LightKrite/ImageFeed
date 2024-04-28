@@ -34,7 +34,7 @@ final class ImagesListService {
         let nextPage = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
         
         guard let request = makeRequest(page: nextPage) else {
-            debugPrint("invalid requesr")
+            debugPrint("\(String(describing: ImagesListService.self)) [fetchPhotosNextPage:] - Network Error" )
             return
         }
         
@@ -55,7 +55,7 @@ final class ImagesListService {
                     NotificationCenter.default.post(name: ImagesListService.didChangeNotification, object: nil)
                     
                 case .failure(let error):
-                    print(error.localizedDescription)
+                    debugPrint("\(String(describing: ImagesListService.self)) [fetchPhotosNextPage:] - Network Error \(error)" )
                 }
             }
             self.currentTask = nil
@@ -70,7 +70,7 @@ final class ImagesListService {
         }
         
         guard let request = makeLikeRequest(photoID: photoID, isLike: isLike) else {
-            debugPrint("Запрос не удался")
+            debugPrint("\(String(describing: ImagesListService.self)) [changeLike:] - Network Error" )
             return
         }
         
@@ -96,7 +96,7 @@ final class ImagesListService {
                     }
                     
                 case.failure(let error):
-                    fatalError("error like: \(error)")
+                    debugPrint("\(String(describing: ImagesListService.self)) [changeLike:] - Network Error \(error)" )
                 }
             
             }

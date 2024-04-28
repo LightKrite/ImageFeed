@@ -50,7 +50,7 @@ final class SingleImageViewController: UIViewController {
                 self.imageDownload = imageResult.image
             case .failure(let error):
                 debugPrint(error.localizedDescription)
-//                self.showError(url: url)
+                self.showError(url: url)
                 
             }
         }
