@@ -68,16 +68,7 @@ final class ProfileViewController: UIViewController {
         let alert = UIAlertController(title: "До встречи!", message: "Точно хотите выйти?", preferredStyle: .alert)
         
         let yesAction = UIAlertAction(title: "Да", style: .default) { _ in
-            OAuth2Storage.shared.clean()
-            WebViewViewController.clean()
-            ImagesListCell.clean()
-            
-            guard let window = UIApplication.shared.windows.first else {
-                fatalError("Invalid Configuration")
-            }
-            
-            window.rootViewController = SplashViewController()
-            window.makeKeyAndVisible()
+            self.logoutClean()
         }
         
         let noAction = UIAlertAction(title: "Нет", style: .default) { _ in
@@ -164,5 +155,20 @@ private extension ProfileViewController {
         nameLabel.text = "\(profile.firstName) \(profile.lastName ?? "")"
         nicknameLabel.text = "@\(profile.username)"
         descriptionLabel.text = profile.bio
+    }
+}
+
+extension ProfileViewController {
+    func logoutClean() {
+        OAuth2Storage.shared.clean()
+        WebViewViewController.clean()
+        ImagesListViewController.clean()
+        
+        guard let window = UIApplication.shared.windows.first else {
+            fatalError("Invalid Configuration")
+        }
+        
+        window.rootViewController = SplashViewController()
+        window.makeKeyAndVisible()
     }
 }

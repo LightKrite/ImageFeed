@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import Kingfisher
+
 
 final class ImagesListViewController: UIViewController {
     
@@ -13,6 +15,8 @@ final class ImagesListViewController: UIViewController {
     
     private let imagesListService = ImagesListService.shared
     private var photos: [Photo] = []
+    
+    var cache = ImageCache.default
     
     private let showSingleImageSegueIdentifier = "ShowSingleImage"
     private var imagesListServiceObserver: NSObjectProtocol?
@@ -143,6 +147,18 @@ extension ImagesListViewController: ImagesListDelegate {
                 UIBlockingProgressHUD.dismissWithoutAnimation()
             }
         }
+    }
+}
+
+extension ImagesListViewController {
+    
+    static func clean() {
+        let cache = ImageCache.default
+        cache.clearMemoryCache()
+        cache.clearDiskCache()
+        cache.backgroundCleanExpiredDiskCache()
+        cache.cleanExpiredMemoryCache()
+        cache.clearCache()
     }
 }
 

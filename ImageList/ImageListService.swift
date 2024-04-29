@@ -31,7 +31,14 @@ final class ImagesListService {
         
         guard currentTask == nil else { return }
         
-        let nextPage = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
+        //        let nextPage = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
+        
+        let nextPage: Int
+        if let lastLoadedPage = self.lastLoadedPage {
+            nextPage = lastLoadedPage + 1
+        } else {
+            nextPage = 1
+        }
         
         guard let request = makeRequest(page: nextPage) else {
             debugPrint("\(String(describing: ImagesListService.self)) [fetchPhotosNextPage:] - Network Error" )
@@ -43,14 +50,24 @@ final class ImagesListService {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let photoResults):
-                    if self.lastLoadedPage == nil {
-                        self.lastLoadedPage = 1
+//                    if self.lastLoadedPage == nil {
+//                        self.lastLoadedPage = 1
+//                    } else {
+//                        self.lastLoadedPage! += 1
+//                    }
+                    if let lastLoadedPage = self.lastLoadedPage {
+                        self.lastLoadedPage = lastLoadedPage + 1
                     } else {
-                        self.lastLoadedPage! += 1
+                        self.lastLoadedPage = 1
                     }
                     
                     let newPhotos = photoResults.map { Photo($0, date: self.dateFormatter) }
-                    self.photos.append(contentsOf: newPhotos)
+                    let uniquePhotos = newPhotos.filter { newPhoto in
+                        !self.photos.contains { existingPhoto in
+                            return newPhoto.id == existingPhoto.id
+                        }
+                    }
+                    self.photos.append(contentsOf: uniquePhotos)
                     
                     NotificationCenter.default.post(name: ImagesListService.didChangeNotification, object: nil)
                     
@@ -74,7 +91,8 @@ final class ImagesListService {
             return
         }
         
-        let task = urlSession.objectTask(for: request) { (result: Result<PhotoLike, Error>) in
+        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<PhotoLike, Error>) in
+            guard let self else { return }
             DispatchQueue.main.async {
                 switch result {
                 case.success:

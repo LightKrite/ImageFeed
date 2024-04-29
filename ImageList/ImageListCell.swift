@@ -32,6 +32,7 @@ final class ImagesListCell: UITableViewCell {
     }()
     
     override func prepareForReuse() {
+        super.prepareForReuse()
         cellImage.kf.cancelDownloadTask()
     }
     
@@ -61,19 +62,7 @@ final class ImagesListCell: UITableViewCell {
         likeButton.setImage(likeImage, for: .normal)
     }
     
-    static func clean() {
-        let cache = ImageCache.default
-        cache.clearMemoryCache()
-        cache.clearDiskCache()
-        cache.backgroundCleanExpiredDiskCache()
-        cache.cleanExpiredMemoryCache()
-        cache.clearCache()
-    }
-    
-    
-    
     @IBAction func likeButtonClicked(_ sender: Any) {
         delegate?.imagesListCellDidTapLike(self)
     }
-    
 }
