@@ -10,20 +10,19 @@ import UIKit
 
 final class SingleImageViewController: UIViewController {
     
-    var image: UIImage! {
-        didSet {
-            guard isViewLoaded else { return }
-            singleImage.image = image
-            rescaleAndCenterImageInScrollView(image: image)
-        }
-    }
+    var image: URL?
+    
+    var imageDownload: UIImage?
     
     @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet private var singleImage: UIImageView!
+    @IBOutlet private var singleImageView: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        singleImage.image = image
+        scrollView.delegate = self
+        scrollView.minimumZoomScale = 0.1
+        scrollView.maximumZoomScale = 1.25
+        loadAndShowImage(url: image)
     }
     
     @IBAction func didTapShareButton(_ sender: UIButton) {
@@ -38,25 +37,36 @@ final class SingleImageViewController: UIViewController {
     @IBAction private func didTapBackwardButton() {
         dismiss(animated: true, completion: nil)
     }
+    
+    func loadAndShowImage(url: URL?) {
+        guard let url = url else { return }
+        UIBlockingProgressHUD.show()
+        singleImageView.kf.setImage(with: url) { [weak self] result in
+            UIBlockingProgressHUD.dismiss()
+            guard let self = self else { return }
+            switch result {
+            case .success(let imageResult):
+                self.rescaleAndCenterImageInScrollView(image: imageResult.image)
+                self.imageDownload = imageResult.image
+            case .failure(let error):
+                debugPrint(error.localizedDescription)
+                self.showError(url: url)
+                
+            }
+        }
+    }
 }
 
 extension SingleImageViewController: UIScrollViewDelegate {
    
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        singleImage
+        singleImageView
     }
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
         let offsetX = max((scrollView.bounds.width - scrollView.contentSize.width) * 0.5, 0)
         let offsetY = max((scrollView.bounds.height - scrollView.contentSize.height) * 0.5, 0)
         scrollView.contentInset = UIEdgeInsets(top: offsetY, left: offsetX, bottom: 0, right: 0)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        scrollView.delegate = self
-        scrollView.minimumZoomScale = 0.1
-        scrollView.maximumZoomScale = 1.25
-        rescaleAndCenterImageInScrollView(image: image)
     }
     
     private func rescaleAndCenterImageInScrollView (image: UIImage) {
@@ -75,4 +85,28 @@ extension SingleImageViewController: UIScrollViewDelegate {
             let y = (newContentSize.height - visibleRectSize.height) / 2
             scrollView.setContentOffset(CGPoint(x: x, y: y), animated: false)
         }
+}
+
+extension SingleImageViewController {
+    private func showError(url: URL) {
+        let alert = UIAlertController(title: "Что то пошло не так(", message: "Попробовать еще раз?", preferredStyle: .alert)
+        let repeats = UIAlertAction(title: "Повторить", style: .default) { [weak self] _ in
+            guard let self = self else { return }
+            self.loadAndShowImage(url: url)
+        }
+        let cancel = UIAlertAction(title: "Не надо", style: .cancel) { _ in
+            alert.dismiss(animated: true)
+        }
+        
+        alert.addAction(repeats)
+        alert.addAction(cancel)
+        
+        present(alert, animated: true)
+    }
+}
+
+extension SingleImageViewController {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        .lightContent
+    }
 }

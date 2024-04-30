@@ -32,7 +32,9 @@ final class ProfileImageService {
         task?.cancel()
         guard task == nil else { return }
         
-        guard var request = URLRequest.makeHTTPRequest(path: "/users/\(username)", httpMethod: "GET"),
+        guard var request = URLRequest.makeHTTPRequest(path: "/users/\(username)",
+                                                       httpMethod: "GET",
+                                                       baseURL: String(describing: APIConstatns.defaultAPIBaseURLString)),
               let token = oAuthStorage.token else {
             completion(.failure(NetworkError.invalidRequest))
             debugPrint("\(String(describing: self)) [dataTask:] - Network Error")

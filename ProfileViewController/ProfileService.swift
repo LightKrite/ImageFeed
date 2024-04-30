@@ -21,7 +21,9 @@ final class ProfileService {
         task?.cancel()
         lastToken = token
         
-        guard var request = URLRequest.makeHTTPRequest(path: "/me", httpMethod: "GET") else {
+        guard var request = URLRequest.makeHTTPRequest(path: "/me",
+                                                       httpMethod: "GET",
+                                                       baseURL: String(describing: APIConstatns.defaultAPIBaseURLString)) else {
             assertionFailure("Failed to make HTTP request")
             completion(.failure(NetworkError.invalidRequest))
             debugPrint("\(String(describing: ProfileResult.self)) [dataTask:] - Network Error")

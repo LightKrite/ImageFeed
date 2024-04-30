@@ -46,7 +46,6 @@ final class OAuth2Service {
                 self.lastCode = nil
                 completion(.failure(error))
                 debugPrint("\(String(describing: self)) [fetchAuthToken:] - Network Error")
-
             }
         }
         self.task = task
@@ -72,7 +71,7 @@ private extension OAuth2Service {
                 + "&&code=\(code)"
                 + "&&grant_type=authorization_code",
                 httpMethod: "POST",
-                baseURL: url)
+                baseURL: String(describing: url))
         else {
             return nil
         }
