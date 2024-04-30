@@ -30,9 +30,7 @@ final class ImagesListService {
         assert(Thread.isMainThread)
         
         guard currentTask == nil else { return }
-        
-        //        let nextPage = lastLoadedPage == nil ? 1 : lastLoadedPage! + 1
-        
+                
         let nextPage: Int
         if let lastLoadedPage = self.lastLoadedPage {
             nextPage = lastLoadedPage + 1
@@ -50,11 +48,7 @@ final class ImagesListService {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let photoResults):
-//                    if self.lastLoadedPage == nil {
-//                        self.lastLoadedPage = 1
-//                    } else {
-//                        self.lastLoadedPage! += 1
-//                    }
+
                     if let lastLoadedPage = self.lastLoadedPage {
                         self.lastLoadedPage = lastLoadedPage + 1
                     } else {
