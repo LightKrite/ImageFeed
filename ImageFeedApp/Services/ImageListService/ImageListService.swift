@@ -7,20 +7,23 @@
 
 import Foundation
 
-final class ImagesListService {
+protocol ImagesListServiceProtocol {
+    var photos: [Photo] { get }
+    func fetchPhotosNextPage()
+    func changeLike(photoId: String, isLike: Bool, _ completion: @escaping (Result<Void, Error>) -> Void)
+}
+
+final class ImagesListService: ImagesListServiceProtocol {
     
     static let shared = ImagesListService()
-    
     static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange")
     
     private let urlSession = URLSession.shared
-    
     private let dateFormatter = ISO8601DateFormatter()
     
     private (set) var photos: [Photo] = []
     
     private var lastLoadedPage: Int?
-    
     private var currentTask: URLSessionTask?
     
 // MARK: func
@@ -75,7 +78,7 @@ final class ImagesListService {
         task.resume()
     }
     
-    func changeLike(photoID: String, isLike: Bool, complition: @escaping (Result<Void,Error>) -> Void) {
+    func changeLike(photoId photoID: String, isLike: Bool, _ complition: @escaping (Result<Void,Error>) -> Void) {
         if currentTask != nil {
             currentTask?.cancel()
         }
@@ -133,6 +136,4 @@ final class ImagesListService {
                                    httpMethod: isLike ? "POST" : "DELETE",
                                    baseURL: String(describing: APIConstatns.defaultAPIBaseURL))
     }
-    
-    
 }

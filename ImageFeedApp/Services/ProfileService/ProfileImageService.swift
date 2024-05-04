@@ -7,8 +7,12 @@
 
 import Foundation
 
+protocol ProfileImageServiceProtocol {
+    var avatarURL: String? { get }
+    func fetchProfileImageURL(_ username: String, completion: @escaping (Result<String, Error>) -> Void)
+}
 
-final class ProfileImageService {
+final class ProfileImageService: ProfileImageServiceProtocol {
     
     private struct UserResult: Codable {
         let profileImage: ProfileImage
@@ -27,22 +31,20 @@ final class ProfileImageService {
     private var task: URLSessionTask?
     private let oAuthStorage = OAuth2Storage()
     
-    func fetchProfileImageURL(username:String, completion: @escaping (Result<String, Error>) -> Void) {
+    func fetchProfileImageURL(_ username:String, completion: @escaping (Result<String, Error>) -> Void) {
         assert(Thread.isMainThread)
         task?.cancel()
         guard task == nil else { return }
         
         guard var request = URLRequest.makeHTTPRequest(path: "/users/\(username)",
                                                        httpMethod: "GET",
-                                                       baseURL: String(describing: APIConstatns.defaultAPIBaseURLString)),
-              let token = oAuthStorage.token else {
+                                                       baseURL: String(describing: APIConstatns.defaultAPIBaseURLString)) else {
             completion(.failure(NetworkError.invalidRequest))
             debugPrint("\(String(describing: self)) [dataTask:] - Network Error")
 
             assertionFailure("Failed to make HTTP request")
             return
         }
-        request.setValue("Bearer \(OAuth2Storage().token!)", forHTTPHeaderField: "Authorization")
         
         let task = urlSession.objectTask(for: request) { [weak self] (result: Result<UserResult, Error>) in
             guard let self = self else { return }

@@ -94,7 +94,7 @@ extension SingleImageViewController {
             guard let self = self else { return }
             self.loadAndShowImage(url: url)
         }
-        let cancel = UIAlertAction(title: "Не надо", style: .cancel) { _ in
+        let cancel = UIAlertAction(title: "Нет", style: .cancel) { _ in
             alert.dismiss(animated: true)
         }
         

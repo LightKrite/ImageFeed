@@ -9,12 +9,17 @@ import Foundation
 import UIKit
 import Kingfisher
 
+public protocol ProfileViewControllerProtocol: AnyObject {
+    var presenter: ProfileViewPresenterProtocol? { get set }
+    func setupProfileDetails(name: String, login: String, bio: String)
+    func setupAvatar(url: URL)
+}
 
-final class ProfileViewController: UIViewController {
+final class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
     
     private let profileService = ProfileService.shared
     private let oAuthStorage = OAuth2Storage()
-    private var profileImageServiceObserver: NSObjectProtocol?
+    private let avatarPlaceholder = UIImage(named: "ImagePlaceholder")
     
     
     private let profilePhoto: UIImageView = {
@@ -30,6 +35,7 @@ final class ProfileViewController: UIViewController {
         label.textColor = .ypWhite
         label.font = UIFont.systemFont(ofSize: 23, weight: .bold)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.accessibilityIdentifier = "nameLabel"
         return label
     }()
     
@@ -39,6 +45,7 @@ final class ProfileViewController: UIViewController {
         label.textColor = .ypGray
         label.font = UIFont.systemFont(ofSize: 13)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.accessibilityIdentifier = "nicknameLabel"
         return label
     }()
     
@@ -52,50 +59,61 @@ final class ProfileViewController: UIViewController {
         return label
     }()
     
+    var presenter: ProfileViewPresenterProtocol? = {
+        return ProfileViewPresenter()
+    }()
+    
     private let logoutButton: UIButton = {
         let button = UIButton()
         let image = UIImage(named: "exitButton")
         button.setImage(image, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.accessibilityIdentifier = "logout"
         
         button.addTarget(self, action: #selector(exitButtonTapped), for: .touchUpInside)
         
         return button
     }()
     
-    @objc
-    private func exitButtonTapped() {
-        let alert = UIAlertController(title: "До встречи!", message: "Точно хотите выйти?", preferredStyle: .alert)
-        
-        let yesAction = UIAlertAction(title: "Да", style: .default) { _ in
-            self.logoutClean()
-        }
-        
-        let noAction = UIAlertAction(title: "Нет", style: .default) { _ in
-            alert.dismiss(animated: true)
-        }
-        alert.addAction(yesAction)
-        alert.addAction(noAction)
-        present(alert, animated: true)
-    }
+   
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .ypBlack
         setupViews()
         setupAllConstraints()
-        updateProfileDetails()
         
-        view.backgroundColor = .ypBlack
-        
-        profileImageServiceObserver = NotificationCenter.default.addObserver(
-            forName: ProfileImageService.didChangeNotification,
-            object: nil,
-            queue: .main) { [weak self] _ in
-                guard let self else { return }
-                self.updateAvatar()
-            }
-        updateAvatar()
+        presenter?.view = self
+        presenter?.updateProfileDetails()
+        presenter?.observerProfileImageService()
     }
+    
+    func setupProfileDetails(name: String, login: String, bio: String) {
+        nameLabel.text = name
+        nicknameLabel.text = login
+        descriptionLabel.text = bio
+    }
+    
+    func setupAvatar(url: URL) {
+        let cache = ImageCache.default
+        cache.clearDiskCache()
+        cache.clearMemoryCache()
+        let processor = RoundCornerImageProcessor(cornerRadius: 42)
+        
+        profilePhoto.kf.setImage(with: url,
+                                 placeholder: avatarPlaceholder,
+                                 options: [.processor(processor),
+                                           .transition(.fade(1))]) { [ weak self ] result in
+                                               guard let self else { return }
+                                               switch result {
+                                               case .success(let image):
+                                                   self.profilePhoto.image = image.image
+                                               case .failure(let error):
+                                                   debugPrint("failed to upload avatar \(error)")
+                                               }
+                                           }
+    }
+    
     
     private func updateAvatar() {
         guard let profileImageURL = ProfileImageService.shared.avatarURL,
@@ -106,7 +124,7 @@ final class ProfileViewController: UIViewController {
         let processor = RoundCornerImageProcessor(cornerRadius: 42)
         
         profilePhoto.kf.setImage(with: url,
-                                 placeholder: UIImage(named: "placeholder"),
+                                 placeholder: avatarPlaceholder,
                                  options: [.processor(processor), .transition(.fade(1))])
     }
     
@@ -139,13 +157,23 @@ final class ProfileViewController: UIViewController {
             logoutButton.centerYAnchor.constraint(equalTo: profilePhoto.centerYAnchor)
         ])
     }
-}
-
-
-extension ProfileViewController {
-    override var preferredStatusBarStyle: UIStatusBarStyle {
-        return .lightContent
-    }
+    
+    @objc
+           private func exitButtonTapped() {
+               let alert = UIAlertController(title: "До встречи!", message: "Точно хотите выйти?", preferredStyle: .alert)
+               
+               let yesAction = UIAlertAction(title: "Да", style: .default) { _ in
+                   self.logoutClean()
+               }
+               
+               let noAction = UIAlertAction(title: "Нет", style: .default) { _ in
+                   alert.dismiss(animated: true)
+               }
+               alert.addAction(yesAction)
+               alert.addAction(noAction)
+               present(alert, animated: true)
+           }
+    
 }
 
 private extension ProfileViewController {
@@ -170,5 +198,11 @@ extension ProfileViewController {
         
         window.rootViewController = SplashViewController()
         window.makeKeyAndVisible()
+    }
+}
+
+extension ProfileViewController {
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
 }
