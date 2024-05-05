@@ -75,7 +75,7 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         return button
     }()
     
-   
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -159,20 +159,20 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
     }
     
     @objc
-           private func exitButtonTapped() {
-               let alert = UIAlertController(title: "До встречи!", message: "Точно хотите выйти?", preferredStyle: .alert)
-               
-               let yesAction = UIAlertAction(title: "Да", style: .default) { _ in
-                   self.logoutClean()
-               }
-               
-               let noAction = UIAlertAction(title: "Нет", style: .default) { _ in
-                   alert.dismiss(animated: true)
-               }
-               alert.addAction(yesAction)
-               alert.addAction(noAction)
-               present(alert, animated: true)
-           }
+    private func exitButtonTapped() {
+        let alert = UIAlertController(title: "До встречи!", message: "Точно хотите выйти?", preferredStyle: .alert)
+        
+        let yesAction = UIAlertAction(title: "Да", style: .default) { _ in
+            self.logoutClean()
+        }
+        
+        let noAction = UIAlertAction(title: "Нет", style: .default) { _ in
+            alert.dismiss(animated: true)
+        }
+        alert.addAction(yesAction)
+        alert.addAction(noAction)
+        present(alert, animated: true)
+    }
     
 }
 
