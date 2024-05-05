@@ -32,7 +32,7 @@
         <!--Web View View Controller-->
         <scene sceneID="fD7-ty-JOI">
             <objects>
-                <viewController id="Oo9-LJ-elU" customClass="WebViewViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WebViewViewController" id="Oo9-LJ-elU" customClass="WebViewViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Lnw-QO-1up">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -116,8 +116,12 @@
                                                 </imageView>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="s7f-NW-bnp" userLabel="Like Button">
                                                     <rect key="frame" x="333" y="4" width="44" height="44"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="44" id="TRS-3K-Y7e"/>
+                                                        <constraint firstAttribute="width" constant="44" id="cqW-sN-30V"/>
+                                                    </constraints>
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                                    <state key="normal" image="like_button_off"/>
+                                                    <state key="normal" image="likeOff"/>
                                                     <connections>
                                                         <action selector="likeButtonClicked:" destination="5rQ-gh-HKG" eventType="touchUpInside" id="aDQ-19-4hE"/>
                                                     </connections>
@@ -215,7 +219,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Ofh-e7-JXy">
-                                <rect key="frame" x="167" y="749" width="51" height="50"/>
+                                <rect key="frame" x="165" y="748" width="53" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="50" id="Vq9-IU-23N"/>
@@ -291,7 +295,7 @@
     <resources>
         <image name="0" width="200" height="132"/>
         <image name="backwardButton" width="24" height="24"/>
-        <image name="like_button_off" width="44" height="44"/>
+        <image name="likeOff" width="44" height="44"/>
         <image name="nav_back_button" width="48" height="48"/>
         <image name="sharing_button" width="50" height="50"/>
         <image name="tab_editorial_active" width="30" height="30"/>
