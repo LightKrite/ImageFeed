@@ -14,7 +14,10 @@ protocol AuthViewControllerDelegate: AnyObject {
 
 final class AuthViewController: UIViewController {
     
+    // MARK: - Constants
     private let showWebViewSegueIdentifier = "ShowWebView"
+    
+    // MARK: - Dependencies
     private let oAuth2Service = OAuth2Service()
     private let oAuth2Storage = OAuth2Storage()
     
@@ -34,6 +37,7 @@ final class AuthViewController: UIViewController {
         }
     }
     
+    // MARK: - UI Elements
     private let logoView: UIImageView = {
         let logoImage = UIImage(named: "auth_screen_logo")
         let logoImageView = UIImageView(image: logoImage)
@@ -67,7 +71,7 @@ final class AuthViewController: UIViewController {
         view.addSubview(loginButton)
     }
     
-    private func setupConstraits() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([logoView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
                                      logoView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
                                      logoView.widthAnchor.constraint(equalToConstant: 60),
@@ -82,7 +86,7 @@ final class AuthViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
-        setupConstraits()
+        setupConstraints()
     }
 }
 
